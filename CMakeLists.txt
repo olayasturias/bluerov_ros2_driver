@@ -45,6 +45,10 @@ install(TARGETS
 # Install Python modules
 ament_python_install_package(scripts)
 
+file(GLOB SCRIPT_FILES scripts/*.py)
 
+install(PROGRAMS ${SCRIPT_FILES}
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 ament_package()

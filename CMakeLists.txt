@@ -7,9 +7,10 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(ament_cmake_python REQUIRED)
+find_package(rclpy REQUIRED)
+find_package(OpenCV 4 REQUIRED)
+
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -22,5 +23,29 @@ if(BUILD_TESTING)
   set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
+
+include_directories(include)
+
+# Cpp executables
+add_executable(video src/video.cpp)
+ament_target_dependencies(video rclcpp OpenCV)
+
+# Install Cpp executables
+install(TARGETS
+  video
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+# Install Python modules
+ament_python_install_package(scripts)
+
+# Install Python executables
+install(PROGRAMS
+  bluerov_ros2_playground/sensor_subscribers.py
+  bluerov_ros2_playground/video_gstreamer.py
+  bluerov_ros2_playground/video_opencv.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 
 ament_package()
